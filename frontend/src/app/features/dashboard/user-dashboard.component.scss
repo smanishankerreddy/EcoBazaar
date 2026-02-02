@@ -1,0 +1,113 @@
+.dashboard-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 64px);
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 28px;
+    color: #2c3e50;
+  }
+}
+
+.dashboard-card {
+  background: white;
+}
+
+.cart-table {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-input {
+  width: 70px;
+  text-align: center;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.carbon-badge {
+  background-color: #4caf50;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.summary {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 16px;
+}
+
+.carbon-total {
+  color: #4caf50;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.loading {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.error-message {
+  color: #f44336;
+  background: #ffebee;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: #666;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #ccc;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

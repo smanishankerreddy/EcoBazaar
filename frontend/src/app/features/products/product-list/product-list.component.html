@@ -1,0 +1,82 @@
+<div class="product-list-container">
+  <div class="header-section">
+    <h1>EcoBazaar - Carbon Footprint Aware Shopping</h1>
+    <div class="auth-buttons" style="margin-left: auto;">
+      <button *ngIf="!isLoggedIn" mat-raised-button color="primary" routerLink="/auth/login" style="margin-right: 10px;">Login</button>
+      <button *ngIf="isLoggedIn" mat-raised-button color="accent" routerLink="/profile">Profile</button>
+    </div>
+    <div class="filters-section">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search Products</mat-label>
+        <input matInput [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search by name or description">
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange()">
+          <mat-option value="">All Categories</mat-option>
+          <mat-option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Eco Rating</mat-label>
+        <mat-select [(ngModel)]="selectedEcoRating" (selectionChange)="onEcoRatingChange()">
+          <mat-option value="">All Ratings</mat-option>
+          <mat-option value="EXCELLENT">Excellent</mat-option>
+          <mat-option value="GOOD">Good</mat-option>
+          <mat-option value="FAIR">Fair</mat-option>
+          <mat-option value="POOR">Poor</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="products-grid" *ngIf="!isLoading">
+    <mat-card *ngFor="let product of filteredProducts" class="product-card">
+      <img [src]="getProductImageUrl(product)" [alt]="product.name" class="product-image">
+      <mat-card-header>
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-subtitle>{{ product.category }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="product-description">{{ product.description }}</p>
+        <div class="product-info">
+          <div class="price">${{ product.price | number:'1.2-2' }}</div>
+          <div class="carbon-impact">
+            <mat-chip [style.background-color]="getEcoRatingColor(product.ecoRating)">
+              {{ product.carbonImpact }} kg CO₂e
+            </mat-chip>
+            <mat-chip *ngIf="product.ecoCertified" color="primary">
+              Eco Certified
+            </mat-chip>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" [routerLink]="['/products', product.id]">
+          View Details
+        </button>
+        <button mat-raised-button color="accent" (click)="addToCart(product)">
+          Add to Cart
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading products...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredProducts.length === 0 && products.length === 0" class="no-products">
+    <p>No products available. Please make sure the backend is running.</p>
+    <p style="font-size: 12px; color: #666;">Backend should be running on http://localhost:8080</p>
+  </div>
+  
+  <div *ngIf="!isLoading && filteredProducts.length === 0 && products.length > 0" class="no-products">
+    <p>No products found matching your criteria.</p>
+  </div>
+</div>

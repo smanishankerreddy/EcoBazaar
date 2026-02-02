@@ -1,0 +1,107 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>
+      <mat-icon>dashboard</mat-icon>
+      My Dashboard
+    </h1>
+    <button mat-stroked-button color="primary" routerLink="/products">
+      <mat-icon>store</mat-icon>
+      Continue Shopping
+    </button>
+  </div>
+
+  <mat-card class="dashboard-card">
+    <mat-card-header>
+      <mat-card-title>My Cart</mat-card-title>
+      <mat-card-subtitle>Update quantities or remove items</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="isLoading" class="loading">Loading your cart...</div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="!isLoading && cart && cart.items && cart.items.length > 0">
+        <table mat-table [dataSource]="cart.items" class="cart-table">
+          <ng-container matColumnDef="product">
+            <th mat-header-cell *matHeaderCellDef>Product</th>
+            <td mat-cell *matCellDef="let item">
+              <strong>{{ item.productName }}</strong>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Quantity</th>
+            <td mat-cell *matCellDef="let item">
+              <div class="quantity-controls">
+                <button mat-icon-button (click)="updateQuantity(item.id, item.quantity - 1)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <input
+                  type="number"
+                  [value]="item.quantity"
+                  (change)="updateQuantity(item.id, $any($event.target).value)"
+                  min="1"
+                  class="quantity-input"
+                >
+                <button mat-icon-button (click)="updateQuantity(item.id, item.quantity + 1)">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let item">${{ item.price.toFixed(2) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="carbon">
+            <th mat-header-cell *matHeaderCellDef>CO₂ (kg)</th>
+            <td mat-cell *matCellDef="let item">
+              <span class="carbon-badge">{{ item.carbonImpact.toFixed(2) }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let item">
+              <button mat-icon-button color="warn" (click)="removeItem(item.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <div class="summary">
+          <div class="summary-row">
+            <span>Total Price</span>
+            <strong>${{ getTotalPrice().toFixed(2) }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Total Carbon</span>
+            <strong class="carbon-total">{{ getTotalCarbon().toFixed(2) }} kg CO₂</strong>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" routerLink="/cart">
+            Open Full Cart / Checkout
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && (!cart || !cart.items || cart.items.length === 0)" class="empty">
+        <mat-icon>shopping_cart</mat-icon>
+        <h3>Your cart is empty</h3>
+        <p>Add products to your cart to see them here.</p>
+        <button mat-raised-button color="primary" routerLink="/products">Browse Products</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

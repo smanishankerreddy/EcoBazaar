@@ -1,0 +1,78 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="navbar-content">
+    <a routerLink="/products" class="logo">
+      <mat-icon>eco</mat-icon>
+      <span>EcoBazaar</span>
+    </a>
+
+    <div class="nav-links">
+      <a mat-button routerLink="/products" routerLinkActive="active">
+        <mat-icon>store</mat-icon>
+        Products
+      </a>
+
+      <a *ngIf="canAccessCart()" mat-button routerLink="/cart" routerLinkActive="active">
+        <mat-icon [matBadge]="cartItemCount" matBadgeColor="accent">shopping_cart</mat-icon>
+        Cart
+      </a>
+
+      <a *ngIf="canAccessSeller()" mat-button routerLink="/seller" routerLinkActive="active">
+        <mat-icon>inventory</mat-icon>
+        Seller Dashboard
+      </a>
+
+      <a *ngIf="canAccessAdmin()" mat-button routerLink="/admin" routerLinkActive="active">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin
+      </a>
+    </div>
+
+    <div class="user-menu">
+      <ng-container *ngIf="authService.isLoggedIn(); else loginButton">
+        <button mat-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
+          {{ userName || 'User' }}
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button *ngIf="userRole === 'USER'" mat-menu-item routerLink="/dashboard">
+            <mat-icon>dashboard</mat-icon>
+            <span>My Dashboard</span>
+          </button>
+          <button *ngIf="userRole === 'USER'" mat-menu-item routerLink="/cart">
+            <mat-icon>shopping_cart</mat-icon>
+            <span>Cart</span>
+          </button>
+          <button *ngIf="userRole === 'SELLER' || userRole === 'ADMIN'" mat-menu-item routerLink="/seller">
+            <mat-icon>inventory</mat-icon>
+            <span>Seller Dashboard</span>
+          </button>
+          <button *ngIf="userRole === 'ADMIN'" mat-menu-item routerLink="/admin">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Admin Dashboard</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item disabled>
+            <mat-icon>badge</mat-icon>
+            <span>Role: {{ getRoleLabel(userRole) }}</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+      <ng-template #loginButton>
+        <a mat-button routerLink="/auth/login">
+          <mat-icon>login</mat-icon>
+          Login
+        </a>
+      </ng-template>
+    </div>
+  </div>
+</mat-toolbar>

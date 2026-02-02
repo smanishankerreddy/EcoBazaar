@@ -1,0 +1,13 @@
+package com.ecobazaar.repository;
+
+import com.ecobazaar.entity.Order;
+import com.ecobazaar.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    List<Order> findByUser(User user);
+}
